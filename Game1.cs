@@ -13,9 +13,11 @@ namespace MonoGame1_5___Summative
 
         Rectangle window;
         Rectangle roadRect;
+        Rectangle roadRect2;
 
         Vector2 roadSpeed;
 
+        int passes;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -27,14 +29,18 @@ namespace MonoGame1_5___Summative
         {
             // TODO: Add your initialization logic here
 
-            window = new Rectangle(0, 0, 800, 500);
+            window = new Rectangle(0, 0, 423, 700);
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
-
-            roadRect = new Rectangle(0, 0, window.Width, 1000);
-            roadSpeed = new Vector2(0, 10);
+            _graphics.ApplyChanges();
 
 
+
+            roadRect = new Rectangle(0, 0, window.Width, window.Height);
+            roadRect2 = new Rectangle(0, -697, window.Width, window.Height);
+            roadSpeed = new Vector2(0, -9);
+
+            passes = 0;
 
             base.Initialize();
         }
@@ -54,9 +60,24 @@ namespace MonoGame1_5___Summative
                 Exit();
 
             // TODO: Add your update logic here
+            
             roadRect.Y -= (int)roadSpeed.Y;
+            if (roadRect.Top > window.Height)
+            {
+                passes++;
+                roadRect.Y -= roadRect.Height + 694;
+            }
+            roadRect2.Y -= (int)roadSpeed.Y;
+            if (roadRect2.Top > window.Height)
+            {
+                passes++;
+                roadRect2.Y -= roadRect2.Height + 694;
+            }
 
-
+            if (passes >= 2)
+            {
+                
+            }
 
             base.Update(gameTime);
         }
@@ -69,7 +90,7 @@ namespace MonoGame1_5___Summative
             _spriteBatch.Begin();
 
             _spriteBatch.Draw(roadTexture, roadRect, Color.White);
-
+            _spriteBatch.Draw(roadTexture, roadRect2, Color.White);
 
 
 
