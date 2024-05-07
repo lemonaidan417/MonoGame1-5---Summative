@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace MonoGame1_5___Summative
 {
@@ -10,14 +11,20 @@ namespace MonoGame1_5___Summative
         private SpriteBatch _spriteBatch;
 
         Texture2D roadTexture;
+        Texture2D porscheTexture;
 
         Rectangle window;
         Rectangle roadRect;
         Rectangle roadRect2;
+        Rectangle porscheRect;
 
         Vector2 roadSpeed;
+        Vector2 porscheSpeed;
 
         int passes;
+
+        float seconds;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -38,10 +45,14 @@ namespace MonoGame1_5___Summative
 
             roadRect = new Rectangle(0, 0, window.Width, window.Height);
             roadRect2 = new Rectangle(0, -697, window.Width, window.Height);
-            roadSpeed = new Vector2(0, -9);
+            roadSpeed = new Vector2(0, -10);
+
+            porscheRect = new Rectangle(210, 450, 256, 256);
+            porscheSpeed = new Vector2(0, 3);
 
             passes = 0;
 
+            seconds = 0;
             base.Initialize();
         }
 
@@ -50,6 +61,7 @@ namespace MonoGame1_5___Summative
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             roadTexture = Content.Load<Texture2D>("road");
+            porscheTexture = Content.Load<Texture2D>("pixel-porsche");
 
             // TODO: use this.Content to load your game content here
         }
@@ -60,25 +72,29 @@ namespace MonoGame1_5___Summative
                 Exit();
 
             // TODO: Add your update logic here
+
+            seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (seconds <= 5)
+            {
+                porscheRect.Y -= (int)porscheSpeed.Y;
+                roadRect.Y -= (int)roadSpeed.Y;
+                if (roadRect.Top > window.Height)
+                {
+                    passes++;
+                    roadRect.Y -= roadRect.Height + 694;
+                }
+                roadRect2.Y -= (int)roadSpeed.Y;
+                if (roadRect2.Top > window.Height)
+                {
+                    passes++;
+                    roadRect2.Y -= roadRect2.Height + 694;
+                }
+            }
+            else
+            {
+                roadSpeed.Y = 0;
+            }
             
-            roadRect.Y -= (int)roadSpeed.Y;
-            if (roadRect.Top > window.Height)
-            {
-                passes++;
-                roadRect.Y -= roadRect.Height + 694;
-            }
-            roadRect2.Y -= (int)roadSpeed.Y;
-            if (roadRect2.Top > window.Height)
-            {
-                passes++;
-                roadRect2.Y -= roadRect2.Height + 694;
-            }
-
-            if (passes >= 2)
-            {
-                
-            }
-
             base.Update(gameTime);
         }
 
@@ -89,10 +105,10 @@ namespace MonoGame1_5___Summative
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
+
             _spriteBatch.Draw(roadTexture, roadRect, Color.White);
             _spriteBatch.Draw(roadTexture, roadRect2, Color.White);
-
-
+            _spriteBatch.Draw(porscheTexture, porscheRect, Color.White);
 
 
             _spriteBatch.End();
