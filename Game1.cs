@@ -11,15 +11,35 @@ namespace MonoGame1_5___Summative
         private SpriteBatch _spriteBatch;
 
         Texture2D roadTexture;
+        
+        Texture2D astonmartinTexture;
+        Texture2D audiTexture;
+        Texture2D bugattiTexture;
+        Texture2D carreraTexture;
+        Texture2D corvetteTexture;
+        Texture2D mercedesTexture;
         Texture2D porscheTexture;
+        Texture2D supraTexture;
+        Texture2D viperTexture;
+
 
         Rectangle window;
         Rectangle roadRect;
         Rectangle roadRect2;
+        Rectangle astonmartinRect;
+        Rectangle audiRect;
+        Rectangle bugattiRect;
+        Rectangle carreraRect;
+        Rectangle corvetteRect;
+        Rectangle mercedesRect;
         Rectangle porscheRect;
+        Rectangle supraRect;
+        Rectangle viperRect;
 
         Vector2 roadSpeed;
         Vector2 porscheSpeed;
+        Vector2 carRSpeed;
+        Vector2 carLSpeed;
 
         int passes;
 
@@ -41,14 +61,25 @@ namespace MonoGame1_5___Summative
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
 
+            astonmartinRect = new Rectangle(220, 510, 70, 150); // L
+            audiRect = new Rectangle(220, 10, 70, 150); // L
+            bugattiRect = new Rectangle(220, 10, 70, 150); // L
+            carreraRect = new Rectangle(220, 10, 70, 150); // L
+            corvetteRect = new Rectangle(220, 10, 70, 150); // L
+            mercedesRect = new Rectangle(20, 110, 70, 150); // R
+            porscheRect = new Rectangle(210, 450, 256, 256); // R
+            supraRect = new Rectangle(220, 10, 70, 150); // R
+            viperRect = new Rectangle(220, 10, 70, 150); // R
 
+            porscheSpeed = new Vector2(0, 3);
+            carRSpeed = new Vector2(0, 1);
+            carLSpeed = new Vector2(0, -1);
 
             roadRect = new Rectangle(0, 0, window.Width, window.Height);
             roadRect2 = new Rectangle(0, -697, window.Width, window.Height);
             roadSpeed = new Vector2(0, -10);
 
-            porscheRect = new Rectangle(210, 450, 256, 256);
-            porscheSpeed = new Vector2(0, 3);
+            
 
             passes = 0;
 
@@ -61,7 +92,15 @@ namespace MonoGame1_5___Summative
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             roadTexture = Content.Load<Texture2D>("road");
+            astonmartinTexture = Content.Load<Texture2D>("pixel-astonmartin");
+            audiTexture = Content.Load<Texture2D>("pixel-audi");
+            bugattiTexture = Content.Load<Texture2D>("pixel-bugatti");
+            carreraTexture = Content.Load<Texture2D>("pixel-carrera");
+            corvetteTexture = Content.Load<Texture2D>("pixel-corvette");
+            mercedesTexture = Content.Load<Texture2D>("pixel-mercedes");
             porscheTexture = Content.Load<Texture2D>("pixel-porsche");
+            supraTexture = Content.Load<Texture2D>("pixel-supra");
+            viperTexture = Content.Load<Texture2D>("pixel-viper");
 
             // TODO: use this.Content to load your game content here
         }
@@ -76,19 +115,29 @@ namespace MonoGame1_5___Summative
             seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (seconds <= 5)
             {
-                porscheRect.Y -= (int)porscheSpeed.Y;
                 roadRect.Y -= (int)roadSpeed.Y;
+                astonmartinRect.Y -= (int)carLSpeed.Y;
+                audiRect.Y -= (int)carLSpeed.Y;
+                bugattiRect.Y -= (int)carLSpeed.Y;
+                carreraRect.Y -= (int)carLSpeed.Y;
+                corvetteRect.Y -= (int)carLSpeed.Y;
+                mercedesRect.Y -= (int)carRSpeed.Y;
+                porscheRect.Y -= (int)porscheSpeed.Y;
+                supraRect.Y -= (int)carRSpeed.Y;
+                viperRect.Y -= (int)carRSpeed.Y;
+
+
+
                 if (roadRect.Top > window.Height)
                 {
-                    passes++;
                     roadRect.Y -= roadRect.Height + 694;
                 }
                 roadRect2.Y -= (int)roadSpeed.Y;
                 if (roadRect2.Top > window.Height)
                 {
-                    passes++;
                     roadRect2.Y -= roadRect2.Height + 694;
                 }
+                
             }
             else
             {
@@ -108,7 +157,15 @@ namespace MonoGame1_5___Summative
 
             _spriteBatch.Draw(roadTexture, roadRect, Color.White);
             _spriteBatch.Draw(roadTexture, roadRect2, Color.White);
+            _spriteBatch.Draw(astonmartinTexture, astonmartinRect, Color.White);
+            _spriteBatch.Draw(audiTexture, audiRect, Color.White);
+            _spriteBatch.Draw(bugattiTexture, bugattiRect, Color.White);
+            _spriteBatch.Draw(carreraTexture, carreraRect, Color.White);
+            _spriteBatch.Draw(corvetteTexture, corvetteRect, Color.White);
+            _spriteBatch.Draw(mercedesTexture, mercedesRect, Color.White);
             _spriteBatch.Draw(porscheTexture, porscheRect, Color.White);
+            _spriteBatch.Draw(supraTexture, supraRect, Color.White);
+            _spriteBatch.Draw(viperTexture, viperRect, Color.White);
 
 
             _spriteBatch.End();
