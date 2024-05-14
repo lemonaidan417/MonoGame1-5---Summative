@@ -41,10 +41,11 @@ namespace MonoGame1_5___Summative
         Vector2 carRSpeed;
         Vector2 carLSpeed;
 
-        int passes;
+        Random generator = new Random();
 
         float seconds;
 
+        int laneChoice;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -61,27 +62,25 @@ namespace MonoGame1_5___Summative
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
 
-            astonmartinRect = new Rectangle(220, 510, 70, 150); // L
-            audiRect = new Rectangle(220, 10, 70, 150); // L
-            bugattiRect = new Rectangle(220, 10, 70, 150); // L
-            carreraRect = new Rectangle(220, 10, 70, 150); // L
-            corvetteRect = new Rectangle(220, 10, 70, 150); // L
-            mercedesRect = new Rectangle(20, 110, 70, 150); // R
+            astonmartinRect = new Rectangle(130, -700, 70, 150); // L
+            audiRect = new Rectangle(50, -1000, 70, 150); // L
+            bugattiRect = new Rectangle(130, -1400, 70, 150); // L
+            carreraRect = new Rectangle(50, -300, 70, 150); // L
+            corvetteRect = new Rectangle(130, -100, 70, 150); // L
+            mercedesRect = new Rectangle(220, 110, 70, 150); // R
             porscheRect = new Rectangle(210, 450, 256, 256); // R
             supraRect = new Rectangle(220, 10, 70, 150); // R
             viperRect = new Rectangle(220, 10, 70, 150); // R
 
             porscheSpeed = new Vector2(0, 3);
             carRSpeed = new Vector2(0, 1);
-            carLSpeed = new Vector2(0, -1);
+            carLSpeed = new Vector2(0, -8);
 
             roadRect = new Rectangle(0, 0, window.Width, window.Height);
             roadRect2 = new Rectangle(0, -697, window.Width, window.Height);
             roadSpeed = new Vector2(0, -10);
 
-            
-
-            passes = 0;
+            laneChoice = 0;
 
             seconds = 0;
             base.Initialize();
@@ -113,37 +112,110 @@ namespace MonoGame1_5___Summative
             // TODO: Add your update logic here
 
             seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (seconds <= 5)
+
+            // Left Cars
             {
-                roadRect.Y -= (int)roadSpeed.Y;
-                astonmartinRect.Y -= (int)carLSpeed.Y;
-                audiRect.Y -= (int)carLSpeed.Y;
-                bugattiRect.Y -= (int)carLSpeed.Y;
-                carreraRect.Y -= (int)carLSpeed.Y;
-                corvetteRect.Y -= (int)carLSpeed.Y;
-                mercedesRect.Y -= (int)carRSpeed.Y;
-                porscheRect.Y -= (int)porscheSpeed.Y;
-                supraRect.Y -= (int)carRSpeed.Y;
-                viperRect.Y -= (int)carRSpeed.Y;
-
-
-
-                if (roadRect.Top > window.Height)
+                // Driving Loops
                 {
-                    roadRect.Y -= roadRect.Height + 694;
+                    if (astonmartinRect.Top > window.Height)
+                    {
+                        astonmartinRect.Y -= window.Height + generator.Next(10, 1500);
+                    }
+                    if (audiRect.Top > window.Height)
+                    {
+                        audiRect.Y -= window.Height + generator.Next(10, 1500);
+                    }
+                    if (bugattiRect.Top > window.Height)
+                    {
+                        bugattiRect.Y -= window.Height + generator.Next(10, 1500);
+                        laneChoice = generator.Next(0, 1);
+                        if (laneChoice == 0)
+                        {
+                            bugattiRect.X = 50;
+                        }
+                        else
+                        {
+                            bugattiRect.X = 130;
+                        }
+                    }
+                    if (carreraRect.Top > window.Height)
+                    {
+                        carreraRect.Y -= window.Height + generator.Next(10, 1500);
+                    }
+                    if (corvetteRect.Top > window.Height)
+                    {
+                        corvetteRect.Y -= window.Height + generator.Next(10, 1500);
+                    }
+
+                    astonmartinRect.Y -= (int)carLSpeed.Y;
+                    audiRect.Y -= (int)carLSpeed.Y;
+                    bugattiRect.Y -= (int)carLSpeed.Y;
+                    carreraRect.Y -= (int)carLSpeed.Y;
+                    corvetteRect.Y -= (int)carLSpeed.Y;
                 }
-                roadRect2.Y -= (int)roadSpeed.Y;
-                if (roadRect2.Top > window.Height)
+                if (seconds <= 5)
                 {
-                    roadRect2.Y -= roadRect2.Height + 694;
+                    carLSpeed.Y = -20;
                 }
-                
+                else
+                {
+                    carLSpeed.Y = -15;
+                }
             }
-            else
+
+            // Right Cars
             {
-                roadSpeed.Y = 0;
+                // Driving 
+                {
+                    if (mercedesRect.Bottom > window.Height)
+                    {
+                        mercedesRect.Y += window.Height + 150;
+                    }
+                    if (mercedesRect.Top > window.Height)
+                    {
+                        mercedesRect.Y -= window.Height + 150;
+                    }
+                    if (mercedesRect.Top > window.Height)
+                    {
+                        mercedesRect.Y -= window.Height + 150;
+                    }
+
+                    mercedesRect.Y -= (int)carRSpeed.Y;
+                    supraRect.Y -= (int)carRSpeed.Y;
+                    viperRect.Y -= (int)carRSpeed.Y;
+                }
+                if (seconds <= 5)
+                {
+                    carRSpeed.Y = 1;
+                }
+                else
+                {
+                    carRSpeed.Y = 8;
+                }
             }
-            
+
+            // Main Car
+            {
+                if (seconds <= 5)
+                {
+                    porscheRect.Y -= (int)porscheSpeed.Y;
+
+                    roadRect.Y -= (int)roadSpeed.Y;
+                    if (roadRect.Top > window.Height)
+                    {
+                        roadRect.Y -= roadRect.Height + 694;
+                    }
+                    roadRect2.Y -= (int)roadSpeed.Y;
+                    if (roadRect2.Top > window.Height)
+                    {
+                        roadRect2.Y -= roadRect2.Height + 694;
+                    }
+                }
+                else
+                {
+                    roadSpeed.Y = 0;
+                }
+            }
             base.Update(gameTime);
         }
 
@@ -161,6 +233,7 @@ namespace MonoGame1_5___Summative
             _spriteBatch.Draw(audiTexture, audiRect, Color.White);
             _spriteBatch.Draw(bugattiTexture, bugattiRect, Color.White);
             _spriteBatch.Draw(carreraTexture, carreraRect, Color.White);
+
             _spriteBatch.Draw(corvetteTexture, corvetteRect, Color.White);
             _spriteBatch.Draw(mercedesTexture, mercedesRect, Color.White);
             _spriteBatch.Draw(porscheTexture, porscheRect, Color.White);
